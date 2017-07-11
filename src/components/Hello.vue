@@ -8,44 +8,44 @@
     <div class='hgz hgz2'>
       <div class="wdj wdj2">
         <img src="../assets/imgs/wdj.gif" />
-        <span class="txt txtwdj2">温度计</span>
+        <span class="txt txtwdj2">{{thermomter1}}</span>
       </div>
     </div>
     <div class='hgz hgz3'>
   
     </div>
     <div class='hgz hgz4'>
-         <span class="txt txtwd">温度</span>
+      <span class="txt txtwd">温度</span>
     </div>
     <div class='hgz hgz5'>
-       <span class="txt txtyw">液位</span>
+      <span class="txt txtyw">液位</span>
     </div>
     <div class='hgz hgz6'>
       <div class="llj2 llj">
         <img src="../assets/imgs/ld.png" />
-        <span class="txt txtllj2">流量计</span>
+        <span class="txt txtllj2">{{flowmeter1}}</span>
       </div>
   
     </div>
     <div class='hgz hgz7'>
-       <span class="txt txtwd2">温度</span>
+      <span class="txt txtwd2">温度</span>
     </div>
     <div class='hgz hgz8'>
-       <span class="txt txtyw2">液位</span>
-        <div class="wdj wdj4">
-          <img src="../assets/imgs/wdj.gif" />
-          <span class="txt txtwdj4">温度计</span>
-        </div>
+      <span class="txt txtyw2">液位</span>
+      <div class="wdj wdj4">
+        <img src="../assets/imgs/wdj.gif" />
+        <span class="txt txtwdj4">{{thermomter3}}</span>
+      </div>
     </div>
   
     <div class='gz gz1'>
       <div class="llj1 llj">
         <img src="../assets/imgs/ld.png" />
-         <span class="txt txtllj1">流量计</span>
+        <span class="txt txtllj1">{{flowmeter}}</span>
       </div>
       <div class="wdj wdj1">
         <img src="../assets/imgs/wdj.gif" />
-        <span class="txt txtwdj1">温度计</span>
+        <span class="txt txtwdj1">{{thermomter}}</span>
       </div>
     </div>
   
@@ -57,7 +57,7 @@
   
     </div>
     <div class='gz gz4'>
-    
+  
     </div>
     <div class='gz gz6'>
   
@@ -74,40 +74,135 @@
     <div class='gz gz8'>
       <div class="wdj wdj3">
         <img src="../assets/imgs/wdj.gif">
-          <span class="txt txtwdj3">温度计</span>
+        <span class="txt txtwdj3">{{thermomter3}}</span>
       </div>
     </div>
+  
+    <div class='gj gj1'>
+  
+    </div>
+    <div class='gj gj2'>
+  
+    </div>
+    <div class='gj gj3 '>
+  
+    </div>
+    <div class='gj gj4 gjbg2'>
+  
+    </div>
+    <div class='gj gj5 gjbg2'>
+  
+    </div>
+    <div class='gj gj6 gjbg2'>
+  
+    </div>
+    <div class='gj gj7 gjbg2'>
+  
+    </div>
+    <div class='gj gj8'>
+  
+    </div>
+    <div class='gj gj9 gjbg2'>
+  
+    </div>
+    <div class='gj gj10 gjbg2'>
+  
+    </div>
     <div class='sx'>
-      <img src="../assets/imgs/sx.gif" />
-       <span class="txt txtsx1">瞬时功率</span>
+      <img src="../assets/imgs/sx.png" />
+      <span class="txt txtsx1">瞬时功率</span>
     </div>
     <div class='sx2'>
-       <span class="txt txtsx2">空气源热泵组</span>
-      <img src="../assets/imgs/sx.gif" />
-       <span class="txt txtsx3">瞬时功率</span>
+      <span class="txt txtsx2">空气源热泵组</span>
+      <img src="../assets/imgs/sx.png" />
+      <span class="txt txtsx3">瞬时功率</span>
     </div>
     <div class='tyndc'>
-       <span class="txt txttyn">太阳能集热板</span>
-      <img src="../assets/imgs/tyndc.gif" />
+      <span class="txt txttyn">太阳能集热板</span>
+      <img src="../assets/imgs/tyndc.png" />
     </div>
     <div class='rsx'>
-      <img src="../assets/imgs/rsx.gif" />
-      <span class="txt txtrsx">热水箱</span>
+      <img src="../assets/imgs/rsx.png" />
+      <span class="txt txtrsx">储热水箱</span>
     </div>
     <div class='rsx2'>
-      <img src="../assets/imgs/rsx.gif" />
+      <img src="../assets/imgs/rsx.png" />
       <span class="txt txtrsx2">太阳能热水箱</span>
     </div>
   </div>
 </template>
 
 <script>
+import ajax from 'axios'
+var TWEEN = require('@tweenjs/tween.js');
 export default {
   name: 'hello',
   data() {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      "flowmeter": "0",   //流量1
+      "flowmeter1": "0", //流量2
+      "thermomter": "0",    //温度1
+      "thermomter1": "0",  //温度2
+      "thermomter2": "0",  //温度3
+      "thermomter3": "0"  //温度4
     }
+  },
+  methods: {
+    async startGetDate() {
+
+      // while (true) {
+      //   await this.wait(5 * 1000);
+      this.getData();
+      // }
+
+    },
+    async wait(time) {
+      return new Promise(r => {
+        setTimeout(() => {
+          r();
+        }, time)
+      })
+
+    },
+    animate(name, oldv, newv) {
+      var self = this;
+      function _animate() {
+        if (TWEEN.update()) {
+          requestAnimationFrame(_animate)
+        }
+      }
+      new TWEEN.Tween({ tweeningNumber: oldv })
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .to({ tweeningNumber: newv }, 1000)
+        .onUpdate(function () {
+          self[name] = this.tweeningNumber.toFixed(0)
+        })
+        .onComplete(() => {
+          //cancelAnimationFrame(animationFrame)
+        })
+        .start()
+      _animate()
+    },
+    getData(flag) {
+      ajax.get('/Index/getSystemRealJson', {}).then(res => {
+        if (res.data.status == 'success') {
+          this.animate('flowmeter', this.flowmeter, res.data.flowmeter);
+          this.animate('flowmeter1', this.flowmeter1, res.data.flowmeter1);
+          this.animate('thermomter', this.thermomter, res.data.thermomter);
+          this.animate('thermomter1', this.thermomter1, res.data.thermomter1);
+          this.animate('thermomter2', this.thermomter2, res.data.thermomter2);
+          this.animate('thermomter3', this.thermomter3, res.data.thermomter3);
+        } else {
+          let msg = res.data.msg || '网络错误'
+          alert(msg);
+        }
+      }).catch(e => {
+        alert('网络错误');
+      });
+    }
+  },
+  mounted() {
+    this.startGetDate();
   }
 }
 </script>
@@ -130,7 +225,7 @@ img {
   width: 200px;
   position: absolute;
   top: 60px;
-  left: 0px;
+  left: 20px;
 }
 
 .sx2 {
@@ -141,74 +236,140 @@ img {
 }
 
 .tyndc {
-  width: 260px;
+  width: 290px;
   position: absolute;
   left: 660px;
-  top: 80px;
+  top: 90px;
+}
+
+.gj {
+  width: 16px;
+  height: 16px;
+  background: url('../assets/imgs/gzgj.png');
+  background-size: 100% 100%;
+  position: absolute;
+}
+
+.gj.gjbg2 {
+  background: url('../assets/imgs/gzgj2.png');
+  background-size: 100% 100%;
+}
+
+.gj1 {
+  left: 30px;
+  top: 235px;
+}
+
+.gj2 {
+  left: 30px;
+  top: 444px;
+  transform: rotate(0deg) rotateX(180deg)
+}
+
+.gj3 {
+  left: 90px;
+  top: 279px;
+  transform: rotate(0deg) rotateX(180deg)
+}
+
+.gj4 {
+  left: 278px;
+  top: 539px;
+}
+
+.gj5 {
+  left: 63px;
+  top: 234px;
+}
+
+.gj6 {
+  left: 318px;
+  top: 274px;
+}
+
+.gj7 {
+  left: 378px;
+  top: 439px;
+}
+
+.gj8 {
+  left: 510px;
+  top: 252px;
+}
+
+.gj9 {
+  left: 508px;
+  top: 539px;
+}
+
+.gj10 {
+  left: 762px;
+  top: 579px;
 }
 
 .rsx {
-  width: 180px;
+  width: 140px;
   position: absolute;
-  left: 8px;
+  left: 28px;
   top: 470px;
 }
 
 .rsx2 {
-  width: 180px;
+  width: 140px;
   position: absolute;
-  left: 270px;
+  left: 300px;
   top: 470px;
 }
 
 .gz {
-  background: url('../assets/imgs/gz1.gif') repeat-y;
-  width: 20px;
+  background: url('../assets/imgs/gz.png') repeat-y;
+  width: 16px;
   background-size: 100% auto;
   position: absolute;
   border-radius: 5px;
 }
 
 .gz1 {
-  height: 210px;
-  top: 240px;
-  left: 10px;
+  height: 198px;
+  top: 250px;
+  left: 30px;
 }
+
 
 .gz2 {
 
-  height: 55px;
+  height: 50px;
   top: 190px;
-  left: 45px;
+  left: 65px;
 }
 
 .gz3 {
   top: 190px;
-  left: 70px;
-  height: 95px;
+  left: 90px;
+  height: 93px;
 }
 
 .gz4 {
   height: 50px;
-  top: 450px;
-  left: 75px;
+  top: 453px;
+  left: 95px;
 }
 
 .gz5 {
-  top: 280px;
+  top: 287px;
   left: 280px;
-  height: 270px;
+  height: 260px;
 }
 
 .gz6 {
   top: 190px;
   left: 320px;
-  height: 95px;
+  height: 90px;
 }
 
 .gz7 {
   top: 200px;
-  height: 250px;
+  height: 248px;
   left: 380px;
 }
 
@@ -219,14 +380,14 @@ img {
 }
 
 .gz8 {
-  height: 290px;
-  top: 257px;
+  height: 275px;
+  top: 268px;
   left: 510px;
 }
 
 
 .hgz {
-  background: url('../assets/imgs/gz2.gif') repeat-x left center;
+  background: url('../assets/imgs/hgz.png') repeat-x left center;
   height: 16px;
   position: absolute;
   background-size: auto 100%;
@@ -236,35 +397,35 @@ img {
 .hgz1 {
 
   top: 235px;
-  width: 35px;
-  left: 20px;
+  width: 30px;
+  left: 40px;
 }
 
 .hgz2 {
 
   top: 275px;
-  width: 250px;
-  left: 80px;
+  width: 226px;
+  left: 100px;
 }
 
 .hgz3 {
 
   top: 440px;
-  width: 370px;
-  left: 20px;
+  width: 345px;
+  left: 40px;
 }
 
 .hgz4 {
 
   top: 540px;
-  width: 190px;
+  width: 185px;
   left: 100px;
 }
 
 .hgz5 {
 
   top: 580px;
-  width: 220px;
+  width: 240px;
   left: 100px;
 }
 
@@ -278,14 +439,14 @@ img {
 .hgz7 {
 
   top: 540px;
-  width: 120px;
+  width: 115px;
   left: 400px;
 }
 
 .hgz8 {
 
   top: 580px;
-  width: 375px;
+  width: 370px;
   left: 400px;
 }
 
@@ -343,104 +504,123 @@ img {
   background: #fff;
   text-align: center;
 }
-.wdj4{
- position: absolute;
+
+.wdj4 {
+  position: absolute;
   left: 140px;
   width: 20px;
   height: 20px;
   background: #fff;
   text-align: center;
 }
-.txt{
+
+.txt {
   position: absolute;
   color: #fff;
   font-size: 12px;
 }
-.txtwdj1{
-  left:-50px;
+
+.txtwdj1 {
+  left: -40px;
   width: 50px;
   text-align: center;
   top: 1px;
 }
-.txtwdj3{
-  left:-50px;
+
+.txtwdj3 {
+  left: -40px;
   width: 50px;
   text-align: center;
   top: 1px;
 }
-.txtwdj2{
-  left:-15px;
+
+.txtwdj2 {
+  left: -15px;
   width: 50px;
   text-align: center;
-  bottom:-20px;
+  bottom: -20px;
 }
-.txtwdj4{
-  left:-15px;
+
+.txtwdj4 {
+  left: -15px;
   width: 50px;
   text-align: center;
-  bottom:-20px;
+  bottom: -20px;
 }
-.txtllj1{
-  left:-50px;
+
+.txtllj1 {
+  left: -40px;
   width: 50px;
   text-align: center;
   top: 1px;
 }
-.txtllj2{
- left:-15px;
+
+.txtllj2 {
+  left: -15px;
   width: 50px;
   text-align: center;
-  bottom:-20px;
+  bottom: -20px;
 }
-.txtsx1{
+
+.txtsx1 {
   width: 13px;
   top: 50px;
   left: -10px;
 }
-.txtsx3{
+
+.txtsx3 {
   width: 13px;
   top: 50px;
   right: -10px;
 }
-.txtsx2{
+
+.txtsx2 {
   width: 13px;
   top: 30px;
-  left: -35px;
+  left: -25px;
 }
-.txttyn{
+
+.txttyn {
   font-size: 14px;
   width: 130px;
-  top: 15px;
-  left: 105px;
+  top: -25px;
+  left: 145px;
 }
-.txtrsx{
-  font-size: 14px;
-  width: 130px;
-  bottom: 25px;
-  right:-105px;
-}
-.txtrsx2{
+
+.txtrsx {
   font-size: 14px;
   width: 130px;
   bottom: 25px;
-  right:-105px;
+  right: -125px;
 }
-.txtwd{
+
+.txtrsx2 {
+  font-size: 14px;
+  width: 130px;
+  bottom: 25px;
+  right: -125px;
+}
+
+.txtwd {
   left: -80px;
   top: -12px;
 }
-.txtyw{
+
+.txtyw {
   left: -80px;
   top: -12px;
 }
-.txtwd2{
-  left: -107px;
+
+.txtwd2 {
+  left: -100px;
   top: -12px;
 }
-.txtyw2{
-  left: -107px;
+
+.txtyw2 {
+  left: -100px;
   top: -12px;
 }
+
 h1,
 h2 {
   font-weight: normal;
